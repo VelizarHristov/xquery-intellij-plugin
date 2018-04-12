@@ -25,6 +25,7 @@ import uk.co.reecedunn.intellij.plugin.xdm.XsAnyURI
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmSequenceType
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
 import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.*
+import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.*
 import uk.co.reecedunn.intellij.plugin.xquery.lang.MarkLogic
 import uk.co.reecedunn.intellij.plugin.xquery.lang.Saxon
@@ -2091,7 +2092,7 @@ class XQueryPsiTest : ParserTestCase() {
         val file = parseText("declare default element namespace 'http://www.w3.org/1999/xhtml';")
         val decl = file.descendants().filterIsInstance<XQueryDefaultNamespaceDecl>().first()
 
-        assertThat(decl.type, `is`(XQueryDefaultNamespaceType.ElementOrType))
+        assertThat(decl.type, `is`(XPathNamespaceType.DefaultElementOrType))
         assertThat(decl.defaultValue?.staticType, `is`(XsAnyURI as XdmSequenceType))
         assertThat(decl.defaultValue?.staticValue as String, `is`("http://www.w3.org/1999/xhtml"))
     }
@@ -2100,7 +2101,7 @@ class XQueryPsiTest : ParserTestCase() {
         val file = parseText("declare default function namespace 'http://www.w3.org/2005/xpath-functions/math';")
         val decl = file.descendants().filterIsInstance<XQueryDefaultNamespaceDecl>().first()
 
-        assertThat(decl.type, `is`(XQueryDefaultNamespaceType.Function))
+        assertThat(decl.type, `is`(XPathNamespaceType.DefaultFunction))
         assertThat(decl.defaultValue?.staticType, `is`(XsAnyURI as XdmSequenceType))
         assertThat(decl.defaultValue?.staticValue as String, `is`("http://www.w3.org/2005/xpath-functions/math"))
     }
@@ -2109,7 +2110,7 @@ class XQueryPsiTest : ParserTestCase() {
         val file = parseText("declare default element namespace '';")
         val decl = file.descendants().filterIsInstance<XQueryDefaultNamespaceDecl>().first()
 
-        assertThat(decl.type, `is`(XQueryDefaultNamespaceType.ElementOrType))
+        assertThat(decl.type, `is`(XPathNamespaceType.DefaultElementOrType))
         assertThat(decl.defaultValue, `is`(nullValue()))
     }
 
@@ -2117,7 +2118,7 @@ class XQueryPsiTest : ParserTestCase() {
         val file = parseText("declare default element namespace;")
         val decl = file.descendants().filterIsInstance<XQueryDefaultNamespaceDecl>().first()
 
-        assertThat(decl.type, `is`(XQueryDefaultNamespaceType.ElementOrType))
+        assertThat(decl.type, `is`(XPathNamespaceType.DefaultElementOrType))
         assertThat(decl.defaultValue, `is`(nullValue()))
     }
 
