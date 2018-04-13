@@ -19,12 +19,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import uk.co.reecedunn.intellij.plugin.core.data.Cacheable
 import uk.co.reecedunn.intellij.plugin.core.data.CacheableProperty
+import uk.co.reecedunn.intellij.plugin.core.data.CachingBehaviour
 import uk.co.reecedunn.intellij.plugin.core.data.`is`
 import uk.co.reecedunn.intellij.plugin.core.sequences.children
 import uk.co.reecedunn.intellij.plugin.xdm.datatype.QName
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
 import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathEQName
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceDeclaration
+import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryDirAttribute
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryDirAttributeValue
 
@@ -32,6 +34,13 @@ class XQueryDirAttributePsiImpl(node: ASTNode):
         ASTWrapperPsiElement(node),
         XQueryDirAttribute,
         XPathNamespaceDeclaration {
+
+    override val namespaceType get(): XPathNamespaceType {
+        return if (namespacePrefix == null)
+            XPathNamespaceType.Unknown
+        else
+            XPathNamespaceType.StaticallyKnown
+    }
 
     override fun subtreeChanged() {
         super.subtreeChanged()

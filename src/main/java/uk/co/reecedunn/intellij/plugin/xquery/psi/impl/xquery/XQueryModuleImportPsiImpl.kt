@@ -21,6 +21,7 @@ import uk.co.reecedunn.intellij.plugin.core.sequences.children
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
 import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathNCName
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceDeclaration
+import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.*
 import uk.co.reecedunn.intellij.plugin.xquery.psi.XQueryPrologResolver
 
@@ -30,6 +31,13 @@ class XQueryModuleImportPsiImpl(node: ASTNode):
         XQueryPrologResolver,
         XPathNamespaceDeclaration {
     // region XPathNamespaceDeclaration
+
+    override val namespaceType get(): XPathNamespaceType {
+        return if (namespacePrefix == null)
+            XPathNamespaceType.Unknown
+        else
+            XPathNamespaceType.StaticallyKnown
+    }
 
     override val namespacePrefix get(): XdmStaticValue? =
         children().filterIsInstance<XPathNCName>().firstOrNull()?.localName as? XdmStaticValue

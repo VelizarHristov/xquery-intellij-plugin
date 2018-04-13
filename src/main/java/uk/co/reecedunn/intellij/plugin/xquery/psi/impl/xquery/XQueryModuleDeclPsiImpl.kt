@@ -17,11 +17,13 @@ package uk.co.reecedunn.intellij.plugin.xquery.psi.impl.xquery
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
+import uk.co.reecedunn.intellij.plugin.core.data.CachingBehaviour
 import uk.co.reecedunn.intellij.plugin.core.sequences.children
 import uk.co.reecedunn.intellij.plugin.core.sequences.siblings
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
 import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathNCName
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceDeclaration
+import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryModuleDecl
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryProlog
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryUriLiteral
@@ -33,6 +35,13 @@ class XQueryModuleDeclPsiImpl(node: ASTNode):
         XQueryPrologResolver,
         XPathNamespaceDeclaration {
     // region XPathNamespaceDeclaration
+
+    override val namespaceType get(): XPathNamespaceType {
+        return if (namespacePrefix == null)
+            XPathNamespaceType.Unknown
+        else
+            XPathNamespaceType.StaticallyKnown
+    }
 
     override val namespacePrefix get(): XdmStaticValue? =
         children().filterIsInstance<XPathNCName>().firstOrNull()?.localName as? XdmStaticValue
