@@ -26,13 +26,27 @@ import uk.co.reecedunn.intellij.plugin.xquery.ast.scripting.ScriptingBlockDecls
 import uk.co.reecedunn.intellij.plugin.xquery.ast.scripting.ScriptingBlockVarDecl
 import uk.co.reecedunn.intellij.plugin.xquery.ast.scripting.ScriptingBlockVarDeclEntry
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.*
+import uk.co.reecedunn.intellij.plugin.xquery.psi.XQueryPrologResolver
 
 interface XPathStaticContext {
-    val defaultElementOrTypeNamespace: Sequence<XdmStaticValue>
-
-    val defaultFunctionNamespace: Sequence<XdmStaticValue>
-
     val variables: Sequence<XPathVariableDeclaration>
+}
+
+fun PsiElement.namespace(type: XPathNamespaceType): Sequence<XdmStaticValue> {
+    return walkTree().reversed().flatMap { node -> when (node) {
+        is XQueryProlog ->
+            node.children().reversed()
+                .filterIsInstance<XQueryDefaultNamespaceDecl>()
+                .map { decl -> if (decl.type == type) decl.defaultValue else null }
+                .filterNotNull()
+        is XQueryMainModule ->
+            if (this is XQueryProlog)
+                emptySequence()
+            else
+                (node as XQueryPrologResolver).prolog?.namespace(type) ?: emptySequence()
+        else ->
+            emptySequence()
+    }}
 }
 
 fun PsiElement.staticallyKnownNamespaces(): Sequence<XPathNamespaceDeclaration> {

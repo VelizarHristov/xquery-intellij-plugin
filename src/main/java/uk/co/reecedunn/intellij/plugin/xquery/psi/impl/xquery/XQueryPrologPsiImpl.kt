@@ -21,49 +21,22 @@ import uk.co.reecedunn.intellij.plugin.core.data.Cacheable
 import uk.co.reecedunn.intellij.plugin.core.data.CacheableProperty
 import uk.co.reecedunn.intellij.plugin.core.data.`is`
 import uk.co.reecedunn.intellij.plugin.core.sequences.children
-import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
-import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathStaticContext
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathVariableDeclaration
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryAnnotatedDecl
-import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryDefaultNamespaceDecl
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryProlog
 
-class XQueryPrologPsiImpl(node: ASTNode):
-        ASTWrapperPsiElement(node),
-        XQueryProlog,
-        XPathStaticContext {
+class XQueryPrologPsiImpl(node: ASTNode) :
+    ASTWrapperPsiElement(node),
+    XQueryProlog,
+    XPathStaticContext {
 
     override fun subtreeChanged() {
         super.subtreeChanged()
-        cachedDefaultElementOrTypeNamespace.invalidate()
-        cachedDefaultFunctionNamespace.invalidate()
         cachedVariables.invalidate()
     }
 
-    override val defaultElementOrTypeNamespace get(): Sequence<XdmStaticValue> =
-        cachedDefaultElementOrTypeNamespace.get() ?: emptySequence()
-
-    private val cachedDefaultElementOrTypeNamespace = CacheableProperty {
-        children().reversed()
-            .filterIsInstance<XQueryDefaultNamespaceDecl>()
-            .map { decl -> if (decl.type == XPathNamespaceType.DefaultElementOrType) decl.defaultValue else null }
-            .filterNotNull() `is` Cacheable
-    }
-
-    override val defaultFunctionNamespace get(): Sequence<XdmStaticValue> =
-        cachedDefaultFunctionNamespace.get() ?: emptySequence()
-
-    private val cachedDefaultFunctionNamespace = CacheableProperty {
-        children().reversed()
-            .filterIsInstance<XQueryDefaultNamespaceDecl>()
-            .map { decl -> if (decl.type == XPathNamespaceType.DefaultFunction) decl.defaultValue else null }
-            .filterNotNull() `is` Cacheable
-    }
-
-    override val variables get(): Sequence<XPathVariableDeclaration> =
-        cachedVariables.get() ?: emptySequence()
-
+    override val variables get(): Sequence<XPathVariableDeclaration> = cachedVariables.get() ?: emptySequence()
     private val cachedVariables = CacheableProperty {
         children().reversed().filterIsInstance<XQueryAnnotatedDecl>().map { decl ->
             decl.children().filterIsInstance<XPathVariableDeclaration>().firstOrNull()

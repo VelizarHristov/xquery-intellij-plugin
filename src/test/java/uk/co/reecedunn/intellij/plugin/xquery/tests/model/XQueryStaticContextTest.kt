@@ -21,9 +21,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import uk.co.reecedunn.intellij.plugin.xdm.XsAnyURI
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmSequenceType
 import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathFunctionCall
-import uk.co.reecedunn.intellij.plugin.xpath.model.XPathStaticContext
-import uk.co.reecedunn.intellij.plugin.xpath.model.inScopeVariablesForFile
-import uk.co.reecedunn.intellij.plugin.xpath.model.staticallyKnownNamespaces
+import uk.co.reecedunn.intellij.plugin.xpath.model.*
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryFunctionDecl
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryMainModule
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryProlog
@@ -34,99 +32,99 @@ class XQueryStaticContextTest : ParserTestCase() {
     // region MainModule :: DefaultNamespaceDecl
 
     fun testMainModule_NoProlog() {
-        val ctx = parse<XQueryMainModule>("<br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryMainModule>("<br/>")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testMainModule_NoDefaultNamespaceDecl() {
-        val ctx = parse<XQueryMainModule>("declare function local:test() {}; <br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryMainModule>("declare function local:test() {}; <br/>")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testMainModule_DefaultNamespaceDecl_Element() {
-        val ctx = parse<XQueryMainModule>("declare default element namespace 'http://www.w3.org/1999/xhtml'; <br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryMainModule>("declare default element namespace 'http://www.w3.org/1999/xhtml'; <br/>")[0]
 
-        val element = ctx.defaultElementOrTypeNamespace.toList()
+        val element = ctx.namespace(XPathNamespaceType.DefaultElementOrType).toList()
         assertThat(element.size, `is`(1))
         assertThat(element[0].staticValue as String, `is`("http://www.w3.org/1999/xhtml"))
         assertThat(element[0].staticType, `is`(XsAnyURI as XdmSequenceType))
 
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testMainModule_DefaultNamespaceDecl_Element_EmptyNamespace() {
-        val ctx = parse<XQueryMainModule>("declare default element namespace ''; <br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryMainModule>("declare default element namespace ''; <br/>")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testMainModule_DefaultNamespaceDecl_Function() {
-        val ctx = parse<XQueryMainModule>("declare default function namespace 'http://www.w3.org/2005/xpath-functions/math'; pi()")[0] as XPathStaticContext
+        val ctx = parse<XQueryMainModule>("declare default function namespace 'http://www.w3.org/2005/xpath-functions/math'; pi()")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
 
-        val function = ctx.defaultFunctionNamespace.toList()
+        val function = ctx.namespace(XPathNamespaceType.DefaultFunction).toList()
         assertThat(function.size, `is`(1))
         assertThat(function[0].staticValue as String, `is`("http://www.w3.org/2005/xpath-functions/math"))
         assertThat(function[0].staticType, `is`(XsAnyURI as XdmSequenceType))
     }
 
     fun testMainModule_DefaultNamespaceDecl_Function_EmptyNamespace() {
-        val ctx = parse<XQueryMainModule>("declare default function namespace ''; pi()")[0] as XPathStaticContext
+        val ctx = parse<XQueryMainModule>("declare default function namespace ''; pi()")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     // endregion
     // region Prolog :: DefaultNamespaceDecl
 
     fun testProlog_NoDefaultNamespaceDecl() {
-        val ctx = parse<XQueryProlog>("declare function local:test() {}; <br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryProlog>("declare function local:test() {}; <br/>")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testProlog_DefaultNamespaceDecl_Element() {
-        val ctx = parse<XQueryProlog>("declare default element namespace 'http://www.w3.org/1999/xhtml'; <br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryProlog>("declare default element namespace 'http://www.w3.org/1999/xhtml'; <br/>")[0]
 
-        val element = ctx.defaultElementOrTypeNamespace.toList()
+        val element = ctx.namespace(XPathNamespaceType.DefaultElementOrType).toList()
         assertThat(element.size, `is`(1))
         assertThat(element[0].staticValue as String, `is`("http://www.w3.org/1999/xhtml"))
         assertThat(element[0].staticType, `is`(XsAnyURI as XdmSequenceType))
 
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testProlog_DefaultNamespaceDecl_Element_EmptyNamespace() {
-        val ctx = parse<XQueryProlog>("declare default element namespace ''; <br/>")[0] as XPathStaticContext
+        val ctx = parse<XQueryProlog>("declare default element namespace ''; <br/>")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     fun testProlog_DefaultNamespaceDecl_Function() {
-        val ctx = parse<XQueryProlog>("declare default function namespace 'http://www.w3.org/2005/xpath-functions/math'; pi()")[0] as XPathStaticContext
+        val ctx = parse<XQueryProlog>("declare default function namespace 'http://www.w3.org/2005/xpath-functions/math'; pi()")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
 
-        val function = ctx.defaultFunctionNamespace.toList()
+        val function = ctx.namespace(XPathNamespaceType.DefaultFunction).toList()
         assertThat(function.size, `is`(1))
         assertThat(function[0].staticValue as String, `is`("http://www.w3.org/2005/xpath-functions/math"))
         assertThat(function[0].staticType, `is`(XsAnyURI as XdmSequenceType))
     }
 
     fun testProlog_DefaultNamespaceDecl_Function_EmptyNamespace() {
-        val ctx = parse<XQueryProlog>("declare default function namespace ''; pi()")[0] as XPathStaticContext
+        val ctx = parse<XQueryProlog>("declare default function namespace ''; pi()")[0]
 
-        assertThat(ctx.defaultElementOrTypeNamespace.count(), `is`(0))
-        assertThat(ctx.defaultFunctionNamespace.count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
     }
 
     // endregion

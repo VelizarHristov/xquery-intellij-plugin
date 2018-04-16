@@ -18,7 +18,6 @@ package uk.co.reecedunn.intellij.plugin.xquery.psi.impl.xquery
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import uk.co.reecedunn.intellij.plugin.core.sequences.children
-import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathStaticContext
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathVariableDeclaration
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryMainModule
@@ -33,12 +32,6 @@ class XQueryMainModulePsiImpl(node: ASTNode):
 
     override val prolog get(): XQueryProlog? =
         children().filterIsInstance<XQueryProlog>().firstOrNull()
-
-    override val defaultElementOrTypeNamespace get(): Sequence<XdmStaticValue> =
-        (prolog as? XPathStaticContext)?.defaultElementOrTypeNamespace ?: emptySequence()
-
-    override val defaultFunctionNamespace get(): Sequence<XdmStaticValue> =
-        (prolog as? XPathStaticContext)?.defaultFunctionNamespace ?: emptySequence()
 
     override val variables get(): Sequence<XPathVariableDeclaration> =
         (prolog as? XPathStaticContext)?.variables ?: emptySequence()
