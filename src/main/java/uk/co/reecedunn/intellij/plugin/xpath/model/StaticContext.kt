@@ -44,9 +44,17 @@ fun PsiElement.namespace(type: XPathNamespaceType): Sequence<XdmStaticValue> {
                 emptySequence()
             else
                 (node as XQueryPrologResolver).prolog?.namespace(type) ?: emptySequence()
+        is XQueryDirElemConstructor ->
+            node.children().filterIsInstance<XQueryDirAttributeList>().firstOrNull()
+                ?.children()?.filterIsInstance<XPathNamespaceDeclaration>()?.map { ns ->
+                if (ns.namespaceType === type)
+                    ns.namespaceUri
+                else
+                    null
+            } ?: emptySequence()
         else ->
             emptySequence()
-    }}
+    }}.filterNotNull()
 }
 
 fun PsiElement.staticallyKnownNamespaces(): Sequence<XPathNamespaceDeclaration> {

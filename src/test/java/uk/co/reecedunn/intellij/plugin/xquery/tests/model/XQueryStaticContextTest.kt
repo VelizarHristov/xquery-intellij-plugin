@@ -128,6 +128,27 @@ class XQueryStaticContextTest : ParserTestCase() {
     }
 
     // endregion
+    // region Prolog :: DefaultNamespaceDecl
+
+    fun testDefaultNamespace_DirAttribute_XmlnsPrefix() {
+        val ctx = parse<XPathFunctionCall>("<a xmlns:b='http://www.example.com'>{test()}</a>")[0]
+
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultElementOrType).count(), `is`(0))
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
+    }
+
+    fun testDefaultNamespace_DirAttribute_Element() {
+        val ctx = parse<XPathFunctionCall>("<a xmlns='http://www.example.com'>{test()}</a>")[0]
+
+        val element = ctx.namespace(XPathNamespaceType.DefaultElementOrType).toList()
+        assertThat(element.size, `is`(1))
+        assertThat(element[0].staticValue as String, `is`("http://www.example.com"))
+        assertThat(element[0].staticType, `is`(XsAnyURI as XdmSequenceType))
+
+        assertThat(ctx.namespace(XPathNamespaceType.DefaultFunction).count(), `is`(0))
+    }
+
+    // endregion
     // endregion
     // region Statically Known Namespaces
     // region DirElemConstructor -> DirAttributeList -> DirAttribute
