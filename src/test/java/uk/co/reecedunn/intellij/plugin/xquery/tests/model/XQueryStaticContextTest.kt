@@ -134,7 +134,7 @@ class XQueryStaticContextTest : ParserTestCase() {
     // region Statically Known Namespaces
     // region DirElemConstructor -> DirAttributeList -> DirAttribute
 
-    fun testStaticallyKnownNamespaces_DirAttribute_Xmlns() {
+    fun testStaticallyKnownNamespaces_DirAttribute_XmlnsPrefix() {
         val element = parse<XPathFunctionCall>("<a xmlns:b='http://www.example.com'>{b:test()}</a>")[0]
         val namespaces = element.staticallyKnownNamespaces().toList()
         assertThat(namespaces.size, `is`(6))
@@ -160,8 +160,31 @@ class XQueryStaticContextTest : ParserTestCase() {
         assertThat(namespaces[5].namespaceUri?.staticValue as String, `is`("http://www.w3.org/XML/1998/namespace"))
     }
 
-    fun testStaticallyKnownNamespaces_DirAttribute_Xmlns_NoNamespaceUri() {
+    fun testStaticallyKnownNamespaces_DirAttribute_XmlnsPrefix_NoNamespaceUri() {
         val element = parse<XPathFunctionCall>("<a xmlns:b=>{b:test()}</a>")[0]
+        val namespaces = element.staticallyKnownNamespaces().toList()
+        assertThat(namespaces.size, `is`(5))
+
+        // predefined XQuery 1.0 namespaces:
+
+        assertThat(namespaces[0].namespacePrefix?.staticValue as String, `is`("local"))
+        assertThat(namespaces[0].namespaceUri?.staticValue as String, `is`("http://www.w3.org/2005/xquery-local-functions"))
+
+        assertThat(namespaces[1].namespacePrefix?.staticValue as String, `is`("fn"))
+        assertThat(namespaces[1].namespaceUri?.staticValue as String, `is`("http://www.w3.org/2005/xpath-functions"))
+
+        assertThat(namespaces[2].namespacePrefix?.staticValue as String, `is`("xsi"))
+        assertThat(namespaces[2].namespaceUri?.staticValue as String, `is`("http://www.w3.org/2001/XMLSchema-instance"))
+
+        assertThat(namespaces[3].namespacePrefix?.staticValue as String, `is`("xs"))
+        assertThat(namespaces[3].namespaceUri?.staticValue as String, `is`("http://www.w3.org/2001/XMLSchema"))
+
+        assertThat(namespaces[4].namespacePrefix?.staticValue as String, `is`("xml"))
+        assertThat(namespaces[4].namespaceUri?.staticValue as String, `is`("http://www.w3.org/XML/1998/namespace"))
+    }
+
+    fun testStaticallyKnownNamespaces_DirAttribute_Xmlns_Default() {
+        val element = parse<XPathFunctionCall>("<a xmlns='http://www.example.com'>{fn:test()}</a>")[0]
         val namespaces = element.staticallyKnownNamespaces().toList()
         assertThat(namespaces.size, `is`(5))
 

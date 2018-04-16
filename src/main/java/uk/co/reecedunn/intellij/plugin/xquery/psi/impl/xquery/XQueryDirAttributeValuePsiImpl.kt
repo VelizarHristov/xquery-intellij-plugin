@@ -30,27 +30,32 @@ import uk.co.reecedunn.intellij.plugin.xdm.model.XdmSequenceType
 import uk.co.reecedunn.intellij.plugin.xdm.model.XdmStaticValue
 import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathEscapeCharacter
 import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceDeclaration
+import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryCharRef
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryDirAttributeValue
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryPredefinedEntityRef
 import uk.co.reecedunn.intellij.plugin.xquery.lexer.XQueryTokenType
 import uk.co.reecedunn.intellij.plugin.xquery.parser.XQueryElementType
 
-class XQueryDirAttributeValuePsiImpl(node: ASTNode):
-        ASTWrapperPsiElement(node),
-        XQueryDirAttributeValue,
-        XdmStaticValue {
+class XQueryDirAttributeValuePsiImpl(node: ASTNode) :
+    ASTWrapperPsiElement(node),
+    XQueryDirAttributeValue,
+    XdmStaticValue {
 
     override fun subtreeChanged() {
         super.subtreeChanged()
         cachedAttributeValue.invalidate()
     }
 
-    override val staticType get(): XdmSequenceType {
-        return cachedAttributeValue.get()?.let {
-            (parent as XPathNamespaceDeclaration).namespacePrefix?.let { XsAnyURI } ?: XsString
-        } ?: XsUntyped
-    }
+    override val staticType
+        get(): XdmSequenceType {
+            return cachedAttributeValue.get()?.let {
+                if ((parent as XPathNamespaceDeclaration).namespaceType == XPathNamespaceType.Unknown)
+                    XsString
+                else
+                    XsAnyURI
+            } ?: XsUntyped
+        }
 
     override val cacheable: CachingBehaviour = CachingBehaviour.Cache
 

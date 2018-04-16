@@ -271,7 +271,7 @@ class XQueryModelTest : ParserTestCase() {
     // region Namespaces
     // region DirAttribute (XPathNamespaceDeclaration)
 
-    fun testDirAttribute_Xmlns() {
+    fun testDirAttribute_XmlnsPrefix() {
         val expr = parse<XQueryDirAttribute>("<a xmlns:b='http://www.example.com'/>")[0] as XPathNamespaceDeclaration
 
         assertThat(expr.namespaceType, `is`(XPathNamespaceType.StaticallyKnown))
@@ -287,7 +287,7 @@ class XQueryModelTest : ParserTestCase() {
         assertThat(expr.namespaceUri?.staticValue as String, `is`("http://www.example.com"))
     }
 
-    fun testDirAttribute_Xmlns_NoNamespaceUri() {
+    fun testDirAttribute_XmlnsPrefix_NoNamespaceUri() {
         val expr = parse<XQueryDirAttribute>("<a xmlns:b=>")[0] as XPathNamespaceDeclaration
 
         assertThat(expr.namespaceType, `is`(XPathNamespaceType.StaticallyKnown))
@@ -311,6 +311,27 @@ class XQueryModelTest : ParserTestCase() {
         assertThat(expr.namespaceUri?.cacheable, `is`(CachingBehaviour.Cache))
         assertThat(expr.namespaceUri?.staticType, `is`(XsString as XdmSequenceType))
         assertThat(expr.namespaceUri?.staticValue as String, `is`("http://www.example.com"))
+    }
+
+    fun testDirAttribute_Xmlns_Default() {
+        val expr = parse<XQueryDirAttribute>("<a xmlns='http://www.example.com'/>")[0] as XPathNamespaceDeclaration
+
+        assertThat(expr.namespaceType, `is`(XPathNamespaceType.DefaultElementOrType))
+
+        assertThat(expr.namespacePrefix, `is`(nullValue()))
+
+        assertThat(expr.namespaceUri, `is`(notNullValue()))
+        assertThat(expr.namespaceUri?.cacheable, `is`(CachingBehaviour.Cache))
+        assertThat(expr.namespaceUri?.staticType, `is`(XsAnyURI as XdmSequenceType))
+        assertThat(expr.namespaceUri?.staticValue as String, `is`("http://www.example.com"))
+    }
+
+    fun testDirAttribute_Xmlns_Default_NoNamespaceUri() {
+        val expr = parse<XQueryDirAttribute>("<a xmlns=>")[0] as XPathNamespaceDeclaration
+
+        assertThat(expr.namespaceType, `is`(XPathNamespaceType.DefaultElementOrType))
+        assertThat(expr.namespacePrefix, `is`(nullValue()))
+        assertThat(expr.namespaceUri, `is`(nullValue()))
     }
 
     // endregion

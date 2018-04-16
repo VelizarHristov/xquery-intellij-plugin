@@ -19,7 +19,6 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import uk.co.reecedunn.intellij.plugin.core.data.Cacheable
 import uk.co.reecedunn.intellij.plugin.core.data.CacheableProperty
-import uk.co.reecedunn.intellij.plugin.core.data.CachingBehaviour
 import uk.co.reecedunn.intellij.plugin.core.data.`is`
 import uk.co.reecedunn.intellij.plugin.core.sequences.children
 import uk.co.reecedunn.intellij.plugin.xdm.datatype.QName
@@ -30,17 +29,10 @@ import uk.co.reecedunn.intellij.plugin.xpath.model.XPathNamespaceType
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryDirAttribute
 import uk.co.reecedunn.intellij.plugin.xquery.ast.xquery.XQueryDirAttributeValue
 
-class XQueryDirAttributePsiImpl(node: ASTNode):
-        ASTWrapperPsiElement(node),
-        XQueryDirAttribute,
-        XPathNamespaceDeclaration {
-
-    override val namespaceType get(): XPathNamespaceType {
-        return if (namespacePrefix == null)
-            XPathNamespaceType.Unknown
-        else
-            XPathNamespaceType.StaticallyKnown
-    }
+class XQueryDirAttributePsiImpl(node: ASTNode) :
+    ASTWrapperPsiElement(node),
+    XQueryDirAttribute,
+    XPathNamespaceDeclaration {
 
     override fun subtreeChanged() {
         super.subtreeChanged()
@@ -49,6 +41,21 @@ class XQueryDirAttributePsiImpl(node: ASTNode):
     }
 
     // region XQueryNamespaceDeclaration
+
+    override val namespaceType get(): XPathNamespaceType = cachedNamespaceType.get()!!
+    private val cachedNamespaceType = CacheableProperty {
+        (children().filterIsInstance<XPathEQName>().map { eqname ->
+            val qname = (eqname as XdmStaticValue).staticValue as? QName
+            qname?.let {
+                if (it.prefix?.staticValue == "xmlns")
+                    XPathNamespaceType.StaticallyKnown
+                else if (it.localName.staticValue == "xmlns")
+                    XPathNamespaceType.DefaultElementOrType
+                else
+                    null
+            }
+        }.firstOrNull() ?: XPathNamespaceType.Unknown) `is` Cacheable
+    }
 
     override val namespacePrefix get(): XdmStaticValue? = cachedNamespacePrefix.get()
     private val cachedNamespacePrefix = CacheableProperty {
