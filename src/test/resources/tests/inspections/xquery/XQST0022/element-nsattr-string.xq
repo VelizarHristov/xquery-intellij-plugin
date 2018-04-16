@@ -1,0 +1,1 @@
+<a xmlns="http://www.example.com"/>

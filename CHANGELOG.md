@@ -2,6 +2,10 @@
 
 ## 1.2 - (In Development)
 
+Inspections:
+
+1.  XQST0022: EnclosedExpr in namespace declaration attributes.
+
 ## 1.1 - 2018-04-10
 
 Language Support:

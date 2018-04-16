@@ -25,6 +25,7 @@
     </ol>
     <p>Inspections:</p>
     <ol>
+      <li>XQST0022: EnclosedExpr in namespace declaration attributes.</li>
     </ol>
   ]]></change-notes>
 
@@ -84,6 +85,12 @@
                      key="inspection.XPST0017.undefined-function.display-name" hasStaticDescription="true"
                      groupName="XQuery" enabledByDefault="false" level="ERROR"
                      implementationClass="uk.co.reecedunn.intellij.plugin.xquery.inspections.xpath.XPST0017.UndefinedFunctionInspection"/>
+
+    <!-- XQST0022 -->
+    <localInspection language="XQuery" shortName="EnclosedExprInNamespaceAttr" bundle="messages.XQueryBundle"
+                     key="inspection.XQST0022.enclosed-expr-in-namespace-attr.display-name" hasStaticDescription="true"
+                     groupName="XQuery" enabledByDefault="false" level="ERROR"
+                     implementationClass="uk.co.reecedunn.intellij.plugin.xquery.inspections.xquery.XQST0022.EnclosedExprInNamespaceAttrInspection"/>
 
     <!-- XQST0031 -->
     <localInspection language="XQuery" shortName="UnsupportedXQueryVersion" bundle="messages.XQueryBundle"
