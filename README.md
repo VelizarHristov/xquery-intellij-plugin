@@ -32,6 +32,10 @@ detection and error recovery. It supports the following W3C specifications:
 *  XQuery Update Facility 1.0 and 3.0;
 *  XQuery Scripting Extension 1.0.
 
+The [XPath and XQuery Extensions](docs/XPath%20and%20XQuery%20Extensions.md) document
+describes the syntax of the vendor extensions supported in this plugin, and
+other changes to the XPath and XQuery grammar.
+
 ![Syntax Highlighting](images/syntax-highlighting.png)
 
 It supports the following XQuery syntax extensions:
