@@ -13,7 +13,7 @@ to the grammar from what is provided in the various specifications.
   - [Cast Expressions](#cast-expressions)
   - [Direct Element Construction](#direct-element-construction)
   - [Primary Expressions](#primary-expressions)
-- [W3C Extensions]
+- [W3C Extensions](#w3c-extensions)
   - [XPath and XQuery Full Text](#xpath-and-xquery-full-text)
     - [Match Options](#match-options)
   - [XQuery Scripting Extension](#xquery-scripting-extension)
