@@ -12,8 +12,15 @@ to the grammar from what is provided in the various specifications.
   - [Typeswitch Expressions](#typeswitch-expressions)
   - [Cast Expressions](#cast-expressions)
   - [Direct Element Construction](#direct-element-construction)
+  - [Primary Expressions](#primary-expressions)
+- [XPath and XQuery Full Text](#xpath-and-xquery-full-text)
+  - [Match Options](#match-options)
 - [XQuery Scripting Extension](#xquery-scripting-extension)
   - [Block Expressions](#block-expressions)
+- [BaseX Vendor Extensions](#basex-vendor-extensions)
+  - [Fuzzy Match Option](#fuzzy-match-options)
+  - [Update Expressions](#update-expressions)
+  - [Non-Deterministic Function Calls](#non-deterministic-function-calls)
 - [Saxon Vendor Extensions](#saxon-vendor-extensions)
   - [Maps](#maps)
   - [Tuple Types](#tuple-types)
@@ -27,7 +34,7 @@ to the grammar from what is provided in the various specifications.
     Prolog   ::= ((DefaultNamespaceDecl | Setter | NamespaceDecl | Import) Separator)*
                  ((ContextItemDecl | AnnotatedDecl | OptionDecl | TypeDecl) Separator)*
 
-This adds the `TypeDecl` Saxon vendor extension.
+This adds the [`TypeDecl`](#type-declarations) Saxon vendor extension.
 
 ### Quantified Expressions
 
@@ -84,6 +91,42 @@ logic, as each `xmlns`-based `DirAttribute` can expose a namespace to the
 direct element constructor expression that is valid for the scope of the
 element.
 
+### Primary Expressions
+
+    PrimaryExpr ::= Literal
+                  | VarRef
+                  | ParenthesizedExpr
+                  | ContextItemExpr
+                  | FunctionCall
+                  | NonDeterministicFunctionCall
+                  | OrderedExpr
+                  | UnorderedExpr
+                  | NodeConstructor
+                  | FunctionItemExpr
+                  | MapConstructor
+                  | ArrayConstructor
+                  | StringConstructor
+                  | UnaryLookup
+
+This adds the [`NonDeterministicFunctionCall`](#non-deterministic-function-calls)
+BaseX vendor extension.
+
+## XPath and XQuery Full Text
+
+### Match Options
+
+    FTMatchOption ::= FTLanguageOption
+                    | FTWildCardOption
+                    | FTThesaurusOption
+                    | FTStemOption
+                    | FTCaseOption
+                    | FTDiacriticsOption
+                    | FTStopWordOption
+                    | FTExtensionOption
+                    | FTFuzzyOption
+
+This adds the [`FTFuzzyOption`](#fuzzy-match-option) BaseX vendor extension.
+
 ## XQuery Scripting Extension
 
 ### Block Expressions
@@ -99,6 +142,35 @@ and `LetBinding` productions.
 
 This change was made to make it easier to implement the variable declaration
 logic, as each `BlockVarDeclEntry` is a single variable declaration.
+
+## BaseX Vendor Extensions
+
+### Fuzzy Match Option
+
+    FTFuzzyOption ::= "fuzzy"
+
+BaseX 6.1 defines a [fuzzy match option](http://docs.basex.org/wiki/Full-Text#Fuzzy_Querying)
+for full text queries.
+
+### Update Expressions
+
+    UpdateExpr := InlineUpdateExpr | BlockUpdateExpr
+    InlineUpdateExpr := "update" Expr
+    BlockUpdateExpr := ( "update" EnclosedUpdateExpr )*
+    EnclosedUpdateExpr := "{" Expr "}"
+
+BaseX defines an [update expression](http://docs.basex.org/wiki/Updates#update)
+to simplify `CopyModifyExpr` constructs. BaseX 7.8 supports inline update
+expressions, and BaseX 8.5 supports block update expressions that can be
+chained.
+
+### Non-Deterministic Function Calls
+
+    NonDeterministicFunctionCalls := "non-deterministic" "$" VarDecl ArgumentList
+
+BaseX 8.4 defines a
+[non-deterministic function call](http://docs.basex.org/wiki/XQuery_Extensions#Non-determinism)
+for calling `NamedFunctionRef` variables.
 
 ## Saxon Vendor Extensions
 
