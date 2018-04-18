@@ -19,13 +19,5 @@ import com.intellij.psi.PsiElement
 
 /**
  * A Saxon 9.8 `TypeDecl` node in the XQuery AST.
- *
- * <pre>
- *    Prolog   ::= ((DefaultNamespaceDecl | Setter | NamespaceDecl | Import) Separator)*
- *                 ((ContextItemDecl | AnnotatedDecl | OptionDecl | TypeDecl) Separator)*
- *    TypeDecl ::= "declare" "type" QName "=" ItemType
- * </pre>
- *
- * Reference: http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/type-aliases
  */
 interface SaxonTypeDecl : PsiElement

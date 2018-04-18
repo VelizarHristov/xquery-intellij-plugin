@@ -6,13 +6,30 @@ to the grammar from what is provided in the various specifications.
 
 -----
 
-- [Quantified Expressions](#quantified-expressions)
-- [Typeswitch Expressions](#typeswitch-expressions)
-- [Cast Expressions](#cast-expressions)
-- [Direct Element Construction](#direct-element-construction)
-- [Block Expressions](#block-expressions)
+- [XPath and XQuery](#xpath-and-xquery)
+  - [Prolog](#prolog)
+  - [Quantified Expressions](#quantified-expressions)
+  - [Typeswitch Expressions](#typeswitch-expressions)
+  - [Cast Expressions](#cast-expressions)
+  - [Direct Element Construction](#direct-element-construction)
+- [XQuery Scripting Extension](#xquery-scripting-extension)
+  - [Block Expressions](#block-expressions)
+- [Saxon Vendor Extensions](#saxon-vendor-extensions)
+  - [Maps](#maps)
+  - [Tuple Types](#tuple-types)
+  - [Type Declarations](#type-declarations)
+  - [Union Types](#union-types)
 
-## Quantified Expressions
+## XPath and XQuery
+
+### Prolog
+
+    Prolog   ::= ((DefaultNamespaceDecl | Setter | NamespaceDecl | Import) Separator)*
+                 ((ContextItemDecl | AnnotatedDecl | OptionDecl | TypeDecl) Separator)*
+
+This adds the `TypeDecl` Saxon vendor extension.
+
+### Quantified Expressions
 
     QuantifiedExpr        := ("some" | "every") QuantifiedExprBinding ("," QuantifiedExprBinding)* "satisfies" ExprSingle
     QuantifiedExprBinding := "$" VarName TypeDeclaration? "in" ExprSingle
@@ -26,7 +43,7 @@ and `LetClause` productions with the addition of the `ForBinding` and
 This change was made to make it easier to implement the variable binding
 logic, as each `QuantifiedExprBinding` is a single variable binding.
 
-## Typeswitch Expressions
+### Typeswitch Expressions
 
     TypeswitchExpr    ::=  "typeswitch" "(" Expr ")" CaseClause+ DefaultCaseClause
     DefaultCaseClause ::=  "default" ("$" VarName)? "return" ExprSingle
@@ -38,7 +55,7 @@ This change was made to make it easier to implement the variable binding
 logic, as each `CaseClause` can expose a variable bound to the typeswitch
 expression that is valid for the scope of the case's return expression.
 
-## Cast Expressions
+### Cast Expressions
 
     CastExpr                 := ArrowTransformUpdateExpr ( "cast" "as" SingleType )?
     ArrowTransformUpdateExpr := ArrowExpr | TransformWithExpr | UpdateExpr
@@ -54,7 +71,7 @@ which has not been standardized. Instead, this change supports any expression
 that is valid in the different specifications, but not expressions that mix them
 in ways not convered by those expressions.
 
-## Direct Element Construction
+### Direct Element Construction
 
     DirAttributeList ::= (S DirAttribute?)*                /* ws: explicit */
     DirAttribute     ::= QName S? "=" S? DirAttributeValue /* ws: explicit */
@@ -67,7 +84,9 @@ logic, as each `xmlns`-based `DirAttribute` can expose a namespace to the
 direct element constructor expression that is valid for the scope of the
 element.
 
-## Block Expressions
+## XQuery Scripting Extension
+
+### Block Expressions
 
     BlockVarDecl      ::= "declare" BlockVarDeclEntry ("," BlockVarDeclEntry)*
     BlockVarDeclEntry ::= "$" VarName TypeDeclaration? (":=" ExprSingle)?
@@ -80,3 +99,37 @@ and `LetBinding` productions.
 
 This change was made to make it easier to implement the variable declaration
 logic, as each `BlockVarDeclEntry` is a single variable declaration.
+
+## Saxon Vendor Extensions
+
+### Maps
+
+    MapConstructorEntry ::= MapKeyExpr (":" | ":=") MapValueExpr
+
+Saxon 9.4 to 9.6 support using `:=` to separate map keys and values. In
+Saxon 9.7 and later, only the XQuery 3.1 map syntax is supported.
+
+### Tuple Types
+
+    TupleType  ::= "tuple" "(" TupleField ("," TupleField)* ")"
+    TupleField ::= NCName ":" SequenceType
+
+A tuple type is a Saxon 9.8 vendor extension described in the
+[Saxonica documentation](http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/tuple-types)
+for defining custom typed maps in XQuery.
+
+### Type Declarations
+
+    TypeDecl ::= "declare" "type" QName "=" ItemType
+
+A type declaration is a Saxon 9.8 vendor extension described in the
+[Saxonica documentation](http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/type-aliases)
+for defining custom type aliases in XQuery.
+
+### Union Types
+
+    UnionType ::= "union" "(" QName ("," QName)* ")"
+
+A union type is a Saxon 9.8 vendor extension described in the
+[Saxonica documentation](http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/union-types)
+for defining custom XDM union types in XQuery.

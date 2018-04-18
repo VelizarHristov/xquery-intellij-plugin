@@ -19,12 +19,5 @@ import com.intellij.psi.PsiElement
 
 /**
  * A Saxon 9.8 `TupleType` node in the XQuery AST.
- *
- * <pre>
- *    TupleType  ::= "tuple" "(" TupleField ("," TupleField)* ")"
- *    TupleField ::= NCName ":" SequenceType
- * </pre>
- *
- * Reference: http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/tuple-types
  */
 interface SaxonTupleType : PsiElement
