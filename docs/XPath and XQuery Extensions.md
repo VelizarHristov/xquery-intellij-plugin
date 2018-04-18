@@ -13,21 +13,30 @@ to the grammar from what is provided in the various specifications.
   - [Cast Expressions](#cast-expressions)
   - [Direct Element Construction](#direct-element-construction)
   - [Primary Expressions](#primary-expressions)
-- [XPath and XQuery Full Text](#xpath-and-xquery-full-text)
-  - [Match Options](#match-options)
-- [XQuery Scripting Extension](#xquery-scripting-extension)
-  - [Block Expressions](#block-expressions)
-- [BaseX Vendor Extensions](#basex-vendor-extensions)
-  - [Fuzzy Match Option](#fuzzy-match-options)
-  - [Update Expressions](#update-expressions)
-  - [Non-Deterministic Function Calls](#non-deterministic-function-calls)
-- [Saxon Vendor Extensions](#saxon-vendor-extensions)
-  - [Maps](#maps)
-  - [Tuple Types](#tuple-types)
-  - [Type Declarations](#type-declarations)
-  - [Union Types](#union-types)
+- [W3C Extensions]
+  - [XPath and XQuery Full Text](#xpath-and-xquery-full-text)
+    - [Match Options](#match-options)
+  - [XQuery Scripting Extension](#xquery-scripting-extension)
+    - [Block Expressions](#block-expressions)
+  - [XQuery Update Facility](#xquery-update-facility)
+- [Vendor Extensions](#vendor-extensions)
+  - [BaseX Vendor Extensions](#basex-vendor-extensions)
+    - [Fuzzy Match Option](#fuzzy-match-options)
+    - [Update Expressions](#update-expressions)
+    - [Non-Deterministic Function Calls](#non-deterministic-function-calls)
+  - [Saxon Vendor Extensions](#saxon-vendor-extensions)
+    - [Maps](#maps)
+    - [Tuple Types](#tuple-types)
+    - [Type Declarations](#type-declarations)
+    - [Union Types](#union-types)
 
 ## XPath and XQuery
+
+The following XQuery specifications are supported:
+
+1.  XQuery 1.0 Second Edition (W3C Recommendation 14 December 2010)
+1.  XQuery 3.0 (W3C Recommendation 08 April 2014)
+1.  XQuery 3.1 (W3C Recommendation 21 March 2017)
 
 ### Prolog
 
@@ -111,9 +120,16 @@ element.
 This adds the [`NonDeterministicFunctionCall`](#non-deterministic-function-calls)
 BaseX vendor extension.
 
-## XPath and XQuery Full Text
+## W3C Extensions
 
-### Match Options
+### XPath and XQuery Full Text
+
+The following Full Text extension specifications are supported:
+
+1.  Full Text 1.0 (W3C Recommendation 17 March 2011)
+1.  Full Text 3.0 (W3C Recommendation 24 November 2015)
+
+#### Match Options
 
     FTMatchOption ::= FTLanguageOption
                     | FTWildCardOption
@@ -127,9 +143,20 @@ BaseX vendor extension.
 
 This adds the [`FTFuzzyOption`](#fuzzy-match-option) BaseX vendor extension.
 
-## XQuery Scripting Extension
+### XQuery Update Facility
 
-### Block Expressions
+The following Update Facility extension specifications are supported:
+
+1.  Update Facility 1.0 (W3C Recommendation 17 March 2011)
+1.  Update Facility 3.0 (W3C Working Group Note 24 January 2017)
+
+### XQuery Scripting Extension
+
+The following Scripting extension specifications are supported:
+
+1.  Scripting Extension 1.0 (W3C Working Group Note 18 September 2014)
+
+#### Block Expressions
 
     BlockVarDecl      ::= "declare" BlockVarDeclEntry ("," BlockVarDeclEntry)*
     BlockVarDeclEntry ::= "$" VarName TypeDeclaration? (":=" ExprSingle)?
@@ -143,16 +170,18 @@ and `LetBinding` productions.
 This change was made to make it easier to implement the variable declaration
 logic, as each `BlockVarDeclEntry` is a single variable declaration.
 
-## BaseX Vendor Extensions
+## Vendor Extensions
 
-### Fuzzy Match Option
+### BaseX Vendor Extensions
+
+#### Fuzzy Match Option
 
     FTFuzzyOption ::= "fuzzy"
 
 BaseX 6.1 defines a [fuzzy match option](http://docs.basex.org/wiki/Full-Text#Fuzzy_Querying)
 for full text queries.
 
-### Update Expressions
+#### Update Expressions
 
     UpdateExpr := InlineUpdateExpr | BlockUpdateExpr
     InlineUpdateExpr := "update" Expr
@@ -164,7 +193,7 @@ to simplify `CopyModifyExpr` constructs. BaseX 7.8 supports inline update
 expressions, and BaseX 8.5 supports block update expressions that can be
 chained.
 
-### Non-Deterministic Function Calls
+#### Non-Deterministic Function Calls
 
     NonDeterministicFunctionCalls := "non-deterministic" "$" VarDecl ArgumentList
 
@@ -172,16 +201,16 @@ BaseX 8.4 defines a
 [non-deterministic function call](http://docs.basex.org/wiki/XQuery_Extensions#Non-determinism)
 for calling `NamedFunctionRef` variables.
 
-## Saxon Vendor Extensions
+### Saxon Vendor Extensions
 
-### Maps
+#### Maps
 
     MapConstructorEntry ::= MapKeyExpr (":" | ":=") MapValueExpr
 
 Saxon 9.4 to 9.6 support using `:=` to separate map keys and values. In
 Saxon 9.7 and later, only the XQuery 3.1 map syntax is supported.
 
-### Tuple Types
+#### Tuple Types
 
     TupleType  ::= "tuple" "(" TupleField ("," TupleField)* ")"
     TupleField ::= NCName ":" SequenceType
@@ -190,7 +219,7 @@ A tuple type is a Saxon 9.8 vendor extension described in the
 [Saxonica documentation](http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/tuple-types)
 for defining custom typed maps in XQuery.
 
-### Type Declarations
+#### Type Declarations
 
     TypeDecl ::= "declare" "type" QName "=" ItemType
 
@@ -198,7 +227,7 @@ A type declaration is a Saxon 9.8 vendor extension described in the
 [Saxonica documentation](http://www.saxonica.com/documentation/index.html#!extensions/syntax-extensions/type-aliases)
 for defining custom type aliases in XQuery.
 
-### Union Types
+#### Union Types
 
     UnionType ::= "union" "(" QName ("," QName)* ")"
 
