@@ -26,6 +26,7 @@ to the grammar from what is provided in the various specifications.
     - [Non-Deterministic Function Calls](#non-deterministic-function-calls)
   - [MarkLogic Vendor Extensions](#marklogic-vendor-extensions)
     - [Compatibility Annotation](#compatibility-annotation)
+    - [Transactions](#transactions)
   - [Saxon Vendor Extensions](#saxon-vendor-extensions)
     - [Maps](#maps)
     - [Tuple Types](#tuple-types)
@@ -212,6 +213,19 @@ for calling `NamedFunctionRef` variables.
 
 MarkLogic supports using the `private` keyword in place of XQuery 3.0 annotations, in addition to
 the `%private` annotation.
+
+#### Transactions
+
+    Module := VersionDecl? (LibraryModule | MainModule) ( TransactionSeparator VersionDecl? (LibraryModule | MainModule) )*
+    TransactionSeparator := ";"
+    ApplyExpr ::= ConcatExpr ( ( TransactionSeparator ConcatExpr )+ TransactionSeparator? )?
+
+MarkLogic supports using ";" to separate transactions. Within this grammar, MarkLogic transactions
+that provide a `VersionDecl` or `Prolog` are parsed in `Module` nodes, while those that don't are
+parsed in `ApplyExpr` nodes. This is to be compatible with Scripting extensions.
+
+The `ApplyExpr` grammar has been modified to make the final transaction separator optional. The
+final transaction separator is required in Scripting extensions, and is invalid for MarkLogic.
 
 ### Saxon Vendor Extensions
 
