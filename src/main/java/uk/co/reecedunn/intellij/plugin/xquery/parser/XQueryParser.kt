@@ -26,22 +26,8 @@ import uk.co.reecedunn.intellij.plugin.xquery.resources.XQueryBundle
 /**
  * A unified XQuery parser for different XQuery dialects.
  *
- * Supported core language specifications:
- * -  XQuery 1.0 Second Edition (W3C Recommendation 14 December 2010)
- * -  XQuery 3.0 (W3C Recommendation 08 April 2014)
- * -  XQuery 3.1 (W3C Recommendation 21 March 2017)
- *
- * Supported W3C XQuery extensions:
- * -  Full Text 1.0 (W3C Recommendation 17 March 2011)
- * -  Full Text 3.0 (W3C Recommendation 24 November 2015)
- * -  Update Facility 1.0 (W3C Recommendation 17 March 2011)
- * -  Update Facility 3.0 (W3C Working Group Note 24 January 2017)
- * -  Scripting Extension 1.0 (W3C Working Group Note 18 September 2014)
- *
- * Supported vendor extensions:
- * -  MarkLogic 1.0-ml Extensions for MarkLogic 6.0, 7.0 and 8.0
- * -  Saxon 9.4 `map`, and 9.8 `tuple`, `union`, and `declare type` extensions
- * -  BaseX 7.8 and 8.5 UpdateExpr extension; Full Text `fuzzy` option
+ * The details of the unified grammar, including vendor extensions, is described
+ * in the `docs/XPath and XQuery Extensions.md` document.
  */
 @Suppress("FunctionName")
 internal class XQueryParser(builder: PsiBuilder) : PsiTreeParser(builder) {
