@@ -24,6 +24,8 @@ to the grammar from what is provided in the various specifications.
     - [Fuzzy Match Option](#fuzzy-match-options)
     - [Update Expressions](#update-expressions)
     - [Non-Deterministic Function Calls](#non-deterministic-function-calls)
+  - [MarkLogic Vendor Extensions](#marklogic-vendor-extensions)
+    - [Compatibility Annotation](#compatibility-annotation)
   - [Saxon Vendor Extensions](#saxon-vendor-extensions)
     - [Maps](#maps)
     - [Tuple Types](#tuple-types)
@@ -200,6 +202,16 @@ chained.
 BaseX 8.4 defines a
 [non-deterministic function call](http://docs.basex.org/wiki/XQuery_Extensions#Non-determinism)
 for calling `NamedFunctionRef` variables.
+
+### MarkLogic Vendor Extensions
+
+#### Compatibility Annotation
+
+    AnnotatedDecl ::= "declare" (MarkLogicCompatibilityAnnotation | CompatibilityAnnotation | Annotation)* (VarDecl | FunctionDecl)
+    MarkLogicCompatibilityAnnotation ::= "private"
+
+MarkLogic supports using the `private` keyword in place of XQuery 3.0 annotations, in addition to
+the `%private` annotation.
 
 ### Saxon Vendor Extensions
 
