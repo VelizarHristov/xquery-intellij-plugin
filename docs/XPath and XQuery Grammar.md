@@ -54,9 +54,6 @@ which has not been standardized. Instead, this change supports any expression
 that is valid in the different specifications, but not expressions that mix them
 in ways not convered by those expressions.
 
-__NOTE:__ This plugin does not model the `ArrowTransformUpdateExpr` construct
-in the AST.
-
 ## Direct Element Construction
 
     DirAttributeList ::= (S DirAttribute?)*                /* ws: explicit */

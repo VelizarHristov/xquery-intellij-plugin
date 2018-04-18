@@ -15,9 +15,9 @@
  */
 package uk.co.reecedunn.intellij.plugin.xquery.ast.update.facility
 
-import com.intellij.psi.PsiElement
+import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathArrowTransformUpdateExpr
 
 /**
  * An XQuery Update Facility 3.0 `TransformWithExpr` node in the XQuery AST.
  */
-interface UpdateFacilityTransformWithExpr : PsiElement
+interface UpdateFacilityTransformWithExpr : XPathArrowTransformUpdateExpr

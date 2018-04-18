@@ -15,9 +15,9 @@
  */
 package uk.co.reecedunn.intellij.plugin.xquery.ast.basex
 
-import com.intellij.psi.PsiElement
+import uk.co.reecedunn.intellij.plugin.xpath.ast.xpath.XPathArrowTransformUpdateExpr
 
 /**
  * A BaseX 7.8/8.5 `UpdateExpr` node in the XQuery AST.
  */
-interface BaseXUpdateExpr : PsiElement
+interface BaseXUpdateExpr : XPathArrowTransformUpdateExpr
