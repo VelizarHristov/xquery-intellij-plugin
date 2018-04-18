@@ -1,4 +1,4 @@
-# XPath and XQuery Grammar
+# XPath and XQuery Extensions
 
 This plugin implements the XQuery 3.1 language specification, and associated
 W3C and vendor extensions in a unified grammar. This file documents the changes
