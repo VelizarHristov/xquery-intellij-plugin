@@ -27,6 +27,7 @@ to the grammar from what is provided in the various specifications.
   - [MarkLogic Vendor Extensions](#marklogic-vendor-extensions)
     - [Compatibility Annotation](#compatibility-annotation)
     - [Transactions](#transactions)
+    - [Try/Catch Expressions](#try-catch-expressions)
   - [Saxon Vendor Extensions](#saxon-vendor-extensions)
     - [Maps](#maps)
     - [Tuple Types](#tuple-types)
@@ -206,6 +207,8 @@ for calling `NamedFunctionRef` variables.
 
 ### MarkLogic Vendor Extensions
 
+1. [MarkLogic Server Enhanced XQuery Language](https://docs.marklogic.com/guide/xquery/enhanced)
+
 #### Compatibility Annotation
 
     AnnotatedDecl ::= "declare" (MarkLogicCompatibilityAnnotation | CompatibilityAnnotation | Annotation)* (VarDecl | FunctionDecl)
@@ -226,6 +229,15 @@ parsed in `ApplyExpr` nodes. This is to be compatible with Scripting extensions.
 
 The `ApplyExpr` grammar has been modified to make the final transaction separator optional. The
 final transaction separator is required in Scripting extensions, and is invalid for MarkLogic.
+
+#### Try/Catch Expressions
+
+    TryCatchExpr ::= TryClause ( MarkLogicCatchExpr | CatchClause+ )
+    MarkLogicCatchExpr ::= "catch" "(" "$" VarName ")" EnclosedExpr
+
+MarkLogic supports a different syntax to the XQuery 3.0 try/catch expressions.
+The variable passed to the `MarkLogicCatchExpr` is the MarkLogic `error:error`
+object.
 
 ### Saxon Vendor Extensions
 
