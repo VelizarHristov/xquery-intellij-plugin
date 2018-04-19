@@ -25,6 +25,7 @@ to the grammar from what is provided in the various specifications.
     - [Compatibility Annotation](#compatibility-annotation)
     - [Transactions](#transactions)
     - [Try/Catch Expressions](#try-catch-expressions)
+    - [Reserved Function Names](#reserved-function-names)
   - [Saxon Vendor Extensions](#saxon-vendor-extensions)
     - [Maps](#maps)
     - [Tuple Types](#tuple-types)
@@ -217,6 +218,30 @@ final transaction separator is required in Scripting extensions, and is invalid 
 MarkLogic supports a different syntax to the XQuery 3.0 try/catch expressions.
 The variable passed to the `MarkLogicCatchExpr` is the MarkLogic `error:error`
 object.
+
+#### Reserved Function Names
+
+MarkLogic 7.0 does not allow the following names in an unprefixed form
+because expression syntax takes precedence.
+
+- `attribute-decl`
+- `complex-type`
+- `element-decl`
+- `schema-component`
+- `schema-particle`
+- `schema-root`
+- `schema-type`
+- `simple-type`
+
+MarkLogic 8.0 does not allow the following names in an unprefixed form
+because expression syntax takes precedence.
+
+- `array-node`
+- `boolean-node`
+- `null-node`
+- `number-node`
+- `object-node`
+- `schema-facet`
 
 ### Saxon Vendor Extensions
 
