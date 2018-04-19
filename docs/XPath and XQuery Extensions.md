@@ -7,21 +7,18 @@ to the grammar from what is provided in the various specifications.
 -----
 
 - [XPath and XQuery](#xpath-and-xquery)
-  - [Prolog](#prolog)
   - [Quantified Expressions](#quantified-expressions)
   - [Typeswitch Expressions](#typeswitch-expressions)
   - [Cast Expressions](#cast-expressions)
   - [Direct Element Construction](#direct-element-construction)
-  - [Primary Expressions](#primary-expressions)
 - [W3C Extensions](#w3c-extensions)
   - [XPath and XQuery Full Text](#xpath-and-xquery-full-text)
-    - [Match Options](#match-options)
   - [XQuery Scripting Extension](#xquery-scripting-extension)
     - [Block Expressions](#block-expressions)
   - [XQuery Update Facility](#xquery-update-facility)
 - [Vendor Extensions](#vendor-extensions)
   - [BaseX Vendor Extensions](#basex-vendor-extensions)
-    - [Fuzzy Match Option](#fuzzy-match-options)
+    - [Match Option](#match-options)
     - [Update Expressions](#update-expressions)
     - [Non-Deterministic Function Calls](#non-deterministic-function-calls)
   - [MarkLogic Vendor Extensions](#marklogic-vendor-extensions)
@@ -41,13 +38,6 @@ The following XQuery specifications are supported:
 1.  XQuery 1.0 Second Edition (W3C Recommendation 14 December 2010)
 1.  XQuery 3.0 (W3C Recommendation 08 April 2014)
 1.  XQuery 3.1 (W3C Recommendation 21 March 2017)
-
-### Prolog
-
-    Prolog   ::= ((DefaultNamespaceDecl | Setter | NamespaceDecl | Import) Separator)*
-                 ((ContextItemDecl | AnnotatedDecl | OptionDecl | TypeDecl) Separator)*
-
-This adds the [`TypeDecl`](#type-declarations) Saxon vendor extension.
 
 ### Quantified Expressions
 
@@ -104,26 +94,6 @@ logic, as each `xmlns`-based `DirAttribute` can expose a namespace to the
 direct element constructor expression that is valid for the scope of the
 element.
 
-### Primary Expressions
-
-    PrimaryExpr ::= Literal
-                  | VarRef
-                  | ParenthesizedExpr
-                  | ContextItemExpr
-                  | FunctionCall
-                  | NonDeterministicFunctionCall
-                  | OrderedExpr
-                  | UnorderedExpr
-                  | NodeConstructor
-                  | FunctionItemExpr
-                  | MapConstructor
-                  | ArrayConstructor
-                  | StringConstructor
-                  | UnaryLookup
-
-This adds the [`NonDeterministicFunctionCall`](#non-deterministic-function-calls)
-BaseX vendor extension.
-
 ## W3C Extensions
 
 ### XPath and XQuery Full Text
@@ -132,20 +102,6 @@ The following Full Text extension specifications are supported:
 
 1.  Full Text 1.0 (W3C Recommendation 17 March 2011)
 1.  Full Text 3.0 (W3C Recommendation 24 November 2015)
-
-#### Match Options
-
-    FTMatchOption ::= FTLanguageOption
-                    | FTWildCardOption
-                    | FTThesaurusOption
-                    | FTStemOption
-                    | FTCaseOption
-                    | FTDiacriticsOption
-                    | FTStopWordOption
-                    | FTExtensionOption
-                    | FTFuzzyOption
-
-This adds the [`FTFuzzyOption`](#fuzzy-match-option) BaseX vendor extension.
 
 ### XQuery Update Facility
 
@@ -180,6 +136,15 @@ logic, as each `BlockVarDeclEntry` is a single variable declaration.
 
 #### Fuzzy Match Option
 
+    FTMatchOption ::= FTLanguageOption
+                    | FTWildCardOption
+                    | FTThesaurusOption
+                    | FTStemOption
+                    | FTCaseOption
+                    | FTDiacriticsOption
+                    | FTStopWordOption
+                    | FTExtensionOption
+                    | FTFuzzyOption
     FTFuzzyOption ::= "fuzzy"
 
 BaseX 6.1 defines a [fuzzy match option](http://docs.basex.org/wiki/Full-Text#Fuzzy_Querying)
@@ -199,6 +164,20 @@ chained.
 
 #### Non-Deterministic Function Calls
 
+    PrimaryExpr ::= Literal
+                  | VarRef
+                  | ParenthesizedExpr
+                  | ContextItemExpr
+                  | FunctionCall
+                  | NonDeterministicFunctionCall
+                  | OrderedExpr
+                  | UnorderedExpr
+                  | NodeConstructor
+                  | FunctionItemExpr
+                  | MapConstructor
+                  | ArrayConstructor
+                  | StringConstructor
+                  | UnaryLookup
     NonDeterministicFunctionCalls := "non-deterministic" "$" VarDecl ArgumentList
 
 BaseX 8.4 defines a
@@ -259,6 +238,8 @@ for defining custom typed maps in XQuery.
 
 #### Type Declarations
 
+    Prolog   ::= ((DefaultNamespaceDecl | Setter | NamespaceDecl | Import) Separator)*
+                 ((ContextItemDecl | AnnotatedDecl | OptionDecl | TypeDecl) Separator)*
     TypeDecl ::= "declare" "type" QName "=" ItemType
 
 A type declaration is a Saxon 9.8 vendor extension described in the
